@@ -1,7 +1,11 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Bot, User, Loader2, Sparkles, Download, Type, Eye, Mic, MicOff } from 'lucide-react';
+import { Send, User, Loader2, Download, Type, Eye, Mic, MicOff } from 'lucide-react';
 import { analyzeData, LiveSession } from '../services/geminiService';
 import { Organization, ChatMessage } from '../types';
+
+// TODO: Replace this URL with your specific image URL to use "your image"
+// Currently using a professional photo placeholder for "Pani Dumka"
+const PANI_DUMKA_AVATAR = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop";
 
 interface GeminiChatProps {
   organizations: Organization[];
@@ -15,7 +19,7 @@ export const GeminiChat: React.FC<GeminiChatProps> = ({ organizations, isOpen, o
     {
       id: 'welcome',
       role: 'model',
-      text: 'Вітаю! Я ваша AI-консультантка пані Думка. Я допоможу знайти притулок, гуманітарну допомогу або контакти волонтерів в Одесі, Миколаєві та Херсоні. Що вас цікавить?',
+      text: 'Вітаю! Я пані Думка. Я допоможу знайти притулок, гуманітарну допомогу або контакти волонтерів в Одесі, Миколаєві та Херсоні. Що вас цікавить?',
       timestamp: Date.now()
     }
   ]);
@@ -151,11 +155,13 @@ export const GeminiChat: React.FC<GeminiChatProps> = ({ organizations, isOpen, o
         <div className={`absolute inset-0 bg-black/30 pointer-events-none ${isHighContrast ? 'hidden' : 'block'}`}></div>
         
         <div className="relative z-10 flex justify-between items-start">
-          <div className={`flex items-center gap-2 ${textShadowClass}`}>
-            <Sparkles className={`w-6 h-6 ${isHighContrast ? 'text-yellow-400' : 'text-white'}`} />
+          <div className={`flex items-center gap-3 ${textShadowClass}`}>
+            <div className={`w-12 h-12 rounded-full border-2 overflow-hidden flex-shrink-0 bg-white ${isHighContrast ? 'border-yellow-400' : 'border-white'}`}>
+              <img src={PANI_DUMKA_AVATAR} alt="Avatar" className="w-full h-full object-cover" />
+            </div>
             <div>
-              <h3 className="font-bold text-lg text-white">пані Думка</h3>
-              <div className="flex items-center gap-2 mt-0.5">
+              <h3 className="font-bold text-xl text-white leading-tight">пані Думка</h3>
+              <div className="flex items-center gap-2">
                 <span className="text-xl leading-none" role="img" aria-label="Ukraine Flag">🇺🇦</span>
                 {isHighContrast && <span className="text-[10px] uppercase font-bold border border-yellow-400 px-1 rounded">Високий контраст</span>}
               </div>
@@ -233,9 +239,15 @@ export const GeminiChat: React.FC<GeminiChatProps> = ({ organizations, isOpen, o
                   : `${messageModelClass} rounded-bl-none`
               }`}
             >
-              <div className="flex items-center gap-2 mb-1.5 opacity-80 text-xs uppercase font-bold tracking-wider">
-                {msg.role === 'model' ? <Bot size={14} /> : <User size={14} />}
-                <span>{msg.role === 'model' ? 'пані Думка' : 'Ви'}</span>
+              <div className="flex items-center gap-2 mb-2 opacity-90 text-xs uppercase font-bold tracking-wider">
+                {msg.role === 'model' ? (
+                  <div className="w-6 h-6 rounded-full overflow-hidden border border-slate-200 bg-white">
+                     <img src={PANI_DUMKA_AVATAR} alt="PD" className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <User size={16} />
+                )}
+                <span className="mt-0.5">{msg.role === 'model' ? 'пані Думка' : 'Ви'}</span>
               </div>
               <div dangerouslySetInnerHTML={{ 
                 __html: msg.text.replace(/\n/g, '<br/>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
