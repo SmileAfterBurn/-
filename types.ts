@@ -1,3 +1,5 @@
+export type RegionName = 'Odesa' | 'Mykolaiv' | 'Kherson';
+
 export interface Organization {
   id: string;
   name: string; // Відповідає колонці "Актори"
@@ -11,6 +13,7 @@ export interface Organization {
   status: 'Active' | 'Inactive' | 'Pending';
   driveFolderUrl: string;
   budget: number;
+  region: RegionName; // Нове поле для фільтрації по регіонах
 }
 
 export interface ChatMessage {

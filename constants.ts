@@ -1,7 +1,25 @@
-import { Organization } from './types';
+import { Organization, RegionName } from './types';
 
 export const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1ev98ifed1h8xc16KcWaOmvaky8I9StuE0-6w7UPG4K4/edit?gid=1212063265#gid=1212063265';
 export const DRIVE_URL = 'https://drive.google.com/drive/folders/1kSQKI_-2b8mmWfUw5ZHvGaDD9g4tPWqU?usp=sharing';
+
+export const REGION_CONFIG: Record<RegionName, { center: [number, number], zoom: number, label: string }> = {
+  'Odesa': {
+    center: [46.4825, 30.7233],
+    zoom: 12,
+    label: 'Одеська область'
+  },
+  'Mykolaiv': {
+    center: [46.9750, 31.9946],
+    zoom: 12,
+    label: 'Миколаївська область'
+  },
+  'Kherson': {
+    center: [46.6354, 32.6169],
+    zoom: 12,
+    label: 'Херсонська область'
+  }
+};
 
 // Дані для Одеської, Миколаївської та Херсонської областей
 export const INITIAL_ORGANIZATIONS: Organization[] = [
@@ -17,7 +35,8 @@ export const INITIAL_ORGANIZATIONS: Organization[] = [
     email: 'info@monsters.org.ua',
     status: 'Active',
     driveFolderUrl: DRIVE_URL,
-    budget: 25000000
+    budget: 25000000,
+    region: 'Odesa'
   },
   {
     id: '2',
@@ -31,7 +50,8 @@ export const INITIAL_ORGANIZATIONS: Organization[] = [
     email: 'help@mykolaiv.volunteer',
     status: 'Active',
     driveFolderUrl: DRIVE_URL,
-    budget: 12500000
+    budget: 12500000,
+    region: 'Mykolaiv'
   },
   {
     id: '3',
@@ -45,7 +65,8 @@ export const INITIAL_ORGANIZATIONS: Organization[] = [
     email: 'support@kherson.hub',
     status: 'Active',
     driveFolderUrl: DRIVE_URL,
-    budget: 8100000
+    budget: 8100000,
+    region: 'Kherson'
   },
   {
     id: '4',
@@ -59,7 +80,8 @@ export const INITIAL_ORGANIZATIONS: Organization[] = [
     email: 'caritas@odessa.ugcc',
     status: 'Active',
     driveFolderUrl: DRIVE_URL,
-    budget: 18000000
+    budget: 18000000,
+    region: 'Odesa'
   },
   {
     id: '5',
@@ -73,7 +95,8 @@ export const INITIAL_ORGANIZATIONS: Organization[] = [
     email: 'mk@redcross.org.ua',
     status: 'Active',
     driveFolderUrl: DRIVE_URL,
-    budget: 30000000
+    budget: 30000000,
+    region: 'Mykolaiv'
   },
   {
     id: '6',
@@ -87,7 +110,8 @@ export const INITIAL_ORGANIZATIONS: Organization[] = [
     email: 'korabelny@volunteer.ks',
     status: 'Pending',
     driveFolderUrl: DRIVE_URL,
-    budget: 950000
+    budget: 950000,
+    region: 'Kherson'
   },
   {
     id: '7',
@@ -101,7 +125,8 @@ export const INITIAL_ORGANIZATIONS: Organization[] = [
     email: 'contact@posmishka.org.ua',
     status: 'Active',
     driveFolderUrl: DRIVE_URL,
-    budget: 100000000
+    budget: 100000000,
+    region: 'Odesa'
   },
   {
     id: '8',
@@ -115,7 +140,8 @@ export const INITIAL_ORGANIZATIONS: Organization[] = [
     email: 'contact@posmishka.org.ua',
     status: 'Active',
     driveFolderUrl: DRIVE_URL,
-    budget: 100000000
+    budget: 100000000,
+    region: 'Mykolaiv'
   },
   {
     id: '9',
@@ -129,6 +155,67 @@ export const INITIAL_ORGANIZATIONS: Organization[] = [
     email: 'contact@posmishka.org.ua',
     status: 'Active',
     driveFolderUrl: DRIVE_URL,
-    budget: 100000000
+    budget: 100000000,
+    region: 'Kherson'
+  },
+  {
+    id: '10',
+    name: 'ВТК «Феникс-Медикал»',
+    address: 'м. Одеса',
+    lat: 46.4750,
+    lng: 30.7450,
+    category: 'Компанія',
+    services: 'Люди з інвалідністю (ТЗР)',
+    phone: '+38 (067) 488-76-00',
+    email: '',
+    status: 'Active',
+    driveFolderUrl: DRIVE_URL,
+    budget: 0,
+    region: 'Odesa'
+  },
+  {
+    id: '11',
+    name: 'Благодійний фонд «Ассалам»',
+    address: 'м. Одеса',
+    lat: 46.4850,
+    lng: 30.7150,
+    category: 'Благодійний фонд',
+    services: 'Переселенці; біженці',
+    phone: '+38 (048) 780-13-04',
+    email: '',
+    status: 'Active',
+    driveFolderUrl: DRIVE_URL,
+    budget: 0,
+    region: 'Odesa'
+  },
+  {
+    id: '12',
+    name: 'Благодійний фонд «Подсолнух»',
+    address: 'м. Одеса',
+    lat: 46.4650,
+    lng: 30.7350,
+    category: 'Благодійний фонд',
+    services: 'Діти з ОРА; діти-інваліди',
+    phone: '+38 (048) 799-33-05',
+    email: '',
+    status: 'Active',
+    driveFolderUrl: DRIVE_URL,
+    budget: 0,
+    region: 'Odesa'
+  },
+  {
+    id: '13',
+    name: 'Благодійний фонд «Жива Надежда»',
+    address: 'м. Одеса',
+    lat: 46.4550,
+    lng: 30.7250,
+    category: 'Благодійний фонд',
+    services: 'Діти/підлітки з малозабезпечених сімей',
+    phone: '+38 (048) 787-47-98',
+    email: '',
+    status: 'Active',
+    driveFolderUrl: DRIVE_URL,
+    budget: 0,
+    region: 'Odesa'
   }
 ];
