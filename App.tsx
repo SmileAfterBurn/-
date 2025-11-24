@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { LayoutGrid, Map as MapIcon, Table as TableIcon, Search, Settings, FileSpreadsheet, Sparkles, HeartHandshake, MapPin, ChevronLeft, ChevronRight, ChevronUp, ChevronDown } from 'lucide-react';
+import { LayoutGrid, Map as MapIcon, Table as TableIcon, Search, Sparkles, HeartHandshake, MapPin, ChevronLeft, ChevronRight, ChevronUp, ChevronDown } from 'lucide-react';
 import { MapView } from './components/MapView';
 import { TableView } from './components/TableView';
 import { GeminiChat } from './components/GeminiChat';
-import { INITIAL_ORGANIZATIONS, SHEET_URL, REGION_CONFIG } from './constants';
+import { INITIAL_ORGANIZATIONS, REGION_CONFIG } from './constants';
 import { Organization, ViewMode, RegionName } from './types';
 
 const App: React.FC = () => {
@@ -12,7 +12,6 @@ const App: React.FC = () => {
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   
   // Sidebar state for Split View
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -204,14 +203,6 @@ const App: React.FC = () => {
             <Sparkles className="w-4 h-4" />
             <span className="hidden sm:inline">Помічник</span>
           </button>
-
-          <button 
-            onClick={() => setIsSettingsOpen(true)}
-            className="p-2.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-full transition"
-            title="Налаштування інтеграції"
-          >
-            <Settings className="w-5 h-5" />
-          </button>
         </div>
       </header>
 
@@ -295,63 +286,6 @@ const App: React.FC = () => {
         />
 
       </main>
-
-      {/* Settings Modal */}
-      {isSettingsOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden">
-            <div className="p-6 border-b border-slate-100">
-              <h2 className="text-xl font-bold text-slate-800">Інтеграція Даних</h2>
-              <p className="text-sm text-slate-500 mt-1">
-                Підключені джерела даних для реєстру.
-              </p>
-            </div>
-            
-            <div className="p-6 space-y-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                  <FileSpreadsheet className="w-4 h-4 text-green-600" />
-                  Google Таблиця (Джерело: Актори, Послуги, Контакти)
-                </label>
-                <div className="flex gap-2">
-                  <input 
-                    type="text" 
-                    readOnly
-                    value={SHEET_URL}
-                    className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-md text-sm text-slate-600 focus:outline-none truncate"
-                  />
-                  <a 
-                    href={SHEET_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-md text-slate-600 transition"
-                  >
-                    Відкрити
-                  </a>
-                </div>
-              </div>
-
-              <div className="bg-teal-50 border border-teal-100 rounded-lg p-4">
-                <h4 className="text-sm font-semibold text-teal-800 mb-2">Статус синхронізації</h4>
-                <ul className="text-xs text-teal-700 space-y-1 list-disc list-inside">
-                  <li>Регіони: Одеська, Миколаївська, Херсонська</li>
-                  <li>Поля: Актори, Послуги, Телефон, Пошта</li>
-                  <li>Оновлення: Автоматично</li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="p-4 bg-slate-50 flex justify-end border-t border-slate-100">
-              <button 
-                onClick={() => setIsSettingsOpen(false)}
-                className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition font-medium text-sm"
-              >
-                Закрити
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

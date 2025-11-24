@@ -90,6 +90,9 @@ export const MapView: React.FC<MapViewProps> = ({
           }
 
           const isSelected = selectedOrgId === org.id;
+          // Sanitize phone for tel: link (remove spaces, parentheses, dashes)
+          const cleanPhone = org.phone ? org.phone.replace(/[^\d+]/g, '') : '';
+
           return (
             <Marker
               key={org.id}
@@ -123,7 +126,7 @@ export const MapView: React.FC<MapViewProps> = ({
                       <div className="flex items-center gap-2 text-xs text-slate-700">
                           <Phone className="w-3.5 h-3.5 text-teal-600 shrink-0" />
                           {org.phone ? (
-                            <a href={`tel:${org.phone}`} className="hover:underline hover:text-teal-700 font-medium">
+                            <a href={`tel:${cleanPhone}`} className="hover:underline hover:text-teal-700 font-medium">
                               {org.phone}
                             </a>
                           ) : (
