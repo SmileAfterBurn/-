@@ -15,7 +15,7 @@ export const GeminiChat: React.FC<GeminiChatProps> = ({ organizations, isOpen, o
     {
       id: 'welcome',
       role: 'model',
-      text: 'Вітаю! Я ваш AI-консультант. Я допоможу знайти притулок, гуманітарну допомогу або контакти волонтерів в Одесі, Миколаєві та Херсоні. Що вас цікавить?',
+      text: 'Вітаю! Я ваша AI-консультантка пані Думка. Я допоможу знайти притулок, гуманітарну допомогу або контакти волонтерів в Одесі, Миколаєві та Херсоні. Що вас цікавить?',
       timestamp: Date.now()
     }
   ]);
@@ -97,7 +97,7 @@ export const GeminiChat: React.FC<GeminiChatProps> = ({ organizations, isOpen, o
     if (messages.length <= 1) return;
     
     const textContent = messages
-      .map(m => `[${new Date(m.timestamp).toLocaleTimeString()}] ${m.role === 'model' ? 'AI Консультант' : 'Користувач'}:\n${m.text}\n`)
+      .map(m => `[${new Date(m.timestamp).toLocaleTimeString()}] ${m.role === 'model' ? 'пані Думка' : 'Користувач'}:\n${m.text}\n`)
       .join('\n-------------------\n');
       
     const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
@@ -154,7 +154,7 @@ export const GeminiChat: React.FC<GeminiChatProps> = ({ organizations, isOpen, o
           <div className={`flex items-center gap-2 ${textShadowClass}`}>
             <Sparkles className={`w-6 h-6 ${isHighContrast ? 'text-yellow-400' : 'text-white'}`} />
             <div>
-              <h3 className="font-bold text-lg text-white">пане Помічник</h3>
+              <h3 className="font-bold text-lg text-white">пані Думка</h3>
               <div className="flex items-center gap-2 mt-0.5">
                 <span className="text-xl leading-none" role="img" aria-label="Ukraine Flag">🇺🇦</span>
                 {isHighContrast && <span className="text-[10px] uppercase font-bold border border-yellow-400 px-1 rounded">Високий контраст</span>}
@@ -235,7 +235,7 @@ export const GeminiChat: React.FC<GeminiChatProps> = ({ organizations, isOpen, o
             >
               <div className="flex items-center gap-2 mb-1.5 opacity-80 text-xs uppercase font-bold tracking-wider">
                 {msg.role === 'model' ? <Bot size={14} /> : <User size={14} />}
-                <span>{msg.role === 'model' ? 'пане Помічник' : 'Ви'}</span>
+                <span>{msg.role === 'model' ? 'пані Думка' : 'Ви'}</span>
               </div>
               <div dangerouslySetInnerHTML={{ 
                 __html: msg.text.replace(/\n/g, '<br/>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 

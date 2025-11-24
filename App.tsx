@@ -201,7 +201,7 @@ const App: React.FC = () => {
             }`}
           >
             <Sparkles className="w-4 h-4" />
-            <span className="hidden sm:inline">Помічник</span>
+            <span className="hidden sm:inline">Помічниця</span>
           </button>
         </div>
       </header>
