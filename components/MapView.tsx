@@ -31,12 +31,25 @@ interface MapViewProps {
   zoom?: number;
 }
 
+const isValidCoordinate = (lat: any, lng: any): boolean => {
+  return (
+    typeof lat === 'number' && 
+    typeof lng === 'number' && 
+    !isNaN(lat) && 
+    !isNaN(lng)
+  );
+};
+
 const MapUpdater: React.FC<{ center: [number, number]; zoom: number }> = ({ center, zoom }) => {
   const map = useMap();
   useEffect(() => {
     // Defensive check: verify coordinates are valid numbers before flying
-    if (center && !isNaN(center[0]) && !isNaN(center[1])) {
-      map.flyTo(center, zoom, { duration: 1.5 });
+    if (center && isValidCoordinate(center[0], center[1])) {
+      try {
+        map.flyTo(center, zoom, { duration: 1.5 });
+      } catch (e) {
+        console.warn("Leaflet flyTo error:", e);
+      }
     }
   }, [center, zoom, map]);
   return null;
@@ -52,15 +65,16 @@ export const MapView: React.FC<MapViewProps> = ({
   const selectedOrg = organizations.find(c => c.id === selectedOrgId);
   
   // Use organization location if selected, otherwise provided center
-  // Ensure selectedOrg has valid coordinates before using them
-  const targetCenter: [number, number] = (selectedOrg && selectedOrg.lat && selectedOrg.lng && !isNaN(selectedOrg.lat) && !isNaN(selectedOrg.lng))
-    ? [selectedOrg.lat, selectedOrg.lng] as [number, number]
-    : center as [number, number];
-    
-  // If target center is still invalid, fallback to default to prevent crash
-  const safeCenter: [number, number] = (!targetCenter || isNaN(targetCenter[0]) || isNaN(targetCenter[1]))
-    ? [46.9750, 31.9946]
-    : targetCenter;
+  const hasSelectedLocation = selectedOrg && isValidCoordinate(selectedOrg.lat, selectedOrg.lng);
+  
+  const targetCenter: [number, number] = hasSelectedLocation
+    ? [selectedOrg!.lat, selectedOrg!.lng]
+    : (center && isValidCoordinate(center[0], center[1]) ? center : [46.9750, 31.9946]);
+
+  // Double check to ensure we never pass NaN to MapContainer
+  const safeCenter: [number, number] = isValidCoordinate(targetCenter[0], targetCenter[1])
+    ? targetCenter
+    : [46.9750, 31.9946];
 
   const targetZoom = selectedOrg ? 15 : zoom;
 
@@ -84,8 +98,8 @@ export const MapView: React.FC<MapViewProps> = ({
         <MapUpdater center={safeCenter} zoom={targetZoom} />
 
         {organizations.map((org) => {
-          // Filter out organizations with invalid coordinates
-          if (!org.lat || !org.lng || isNaN(org.lat) || isNaN(org.lng)) {
+          // Strict filtering for markers
+          if (!isValidCoordinate(org.lat, org.lng)) {
             return null;
           }
 

@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { LayoutGrid, Map as MapIcon, Table as TableIcon, Search, Sparkles, HeartHandshake, MapPin, ChevronLeft, ChevronRight, ChevronUp, ChevronDown } from 'lucide-react';
 import { MapView } from './components/MapView';
 import { TableView } from './components/TableView';
 import { GeminiChat } from './components/GeminiChat';
+import { IntroModal } from './components/IntroModal';
 import { INITIAL_ORGANIZATIONS, REGION_CONFIG } from './constants';
 import { Organization, ViewMode, RegionName } from './types';
 
@@ -18,11 +19,30 @@ const App: React.FC = () => {
 
   // Region State
   const [activeRegion, setActiveRegion] = useState<RegionName | null>(null);
-  const [isRegionModalOpen, setIsRegionModalOpen] = useState(true);
+  const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
+
+  // Intro/Onboarding State
+  const [showIntro, setShowIntro] = useState(false);
 
   // Filter states
   const [filterStatus, setFilterStatus] = useState<string>('All');
   const [filterCategory, setFilterCategory] = useState<string>('All');
+
+  // Initialization Logic
+  useEffect(() => {
+    const hasSeenIntro = localStorage.getItem('hide_intro_annotation');
+    if (hasSeenIntro === 'true') {
+      setShowIntro(false);
+      setIsRegionModalOpen(true);
+    } else {
+      setShowIntro(true);
+    }
+  }, []);
+
+  const handleIntroComplete = () => {
+    setShowIntro(false);
+    setIsRegionModalOpen(true);
+  };
 
   const handleRegionSelect = (region: RegionName) => {
     setActiveRegion(region);
@@ -91,8 +111,13 @@ const App: React.FC = () => {
   return (
     <div className="h-screen flex flex-col bg-slate-50 overflow-hidden relative">
       
+      {/* Intro / Annotation Modal (Highest Priority) */}
+      {showIntro && (
+        <IntroModal onComplete={handleIntroComplete} />
+      )}
+
       {/* Welcome / Region Selection Modal */}
-      {isRegionModalOpen && (
+      {isRegionModalOpen && !showIntro && (
         <div className="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8 text-center animate-in fade-in zoom-in duration-300">
             <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-6 text-teal-600">
@@ -247,7 +272,7 @@ const App: React.FC = () => {
                <button
                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                  className={`
-                   absolute z-[400] flex items-center justify-center bg-white border border-slate-300 shadow-sm text-slate-500 hover:text-teal-600 hover:bg-slate-50 transition-all focus:outline-none
+                   absolute z-[40] flex items-center justify-center bg-white border border-slate-300 shadow-sm text-slate-500 hover:text-teal-600 hover:bg-slate-50 transition-all focus:outline-none
                    /* Mobile positioning: Top edge, horizontal toggle */
                    left-1/2 -translate-x-1/2 top-0 w-10 h-5 rounded-b-md border-t-0
                    /* Desktop positioning: Left edge, vertical toggle */
