@@ -18,14 +18,17 @@ export const analyzeData = async (
   try {
     const ai = getClient();
     
-    // Prepare concise context
+    // Prepare concise context with ALL available details
     const dataContext = JSON.stringify(organizations.map(o => ({
       name: o.name,
       address: o.address,
       services: o.services,
       phone: o.phone,
       email: o.email,
-      category: o.category
+      category: o.category,
+      budget: o.budget, // Added for detail
+      status: o.status, // Added for detail
+      region: o.region  // Added for detail
     })), null, 2);
     
     const response: GenerateContentResponse = await ai.models.generateContent({
@@ -38,11 +41,15 @@ export const analyzeData = async (
 ТВОЯ МОВА — ВИКЛЮЧНО УКРАЇНСЬКА. Відповідай українською мовою за будь-яких обставин.
 
 Твоє завдання:
-1. Допомагати людям знаходити благодійні фонди, притулки та соціальні послуги на основі наданих даних.
+1. Допомагати людям знаходити благодійні фонди, притулки та соціальні послуги.
 2. Бути емпатичною, ввічливою та конкретною.
 3. Якщо запитують контакти, обов'язково надавай номер телефону та пошту.
-4. Якщо інформації немає в наданій базі даних, чесно повідом про це і запропонуй звернутися до загальних гарячих ліній.
-5. Форматуй відповідь чітко (використовуй списки, жирний шрифт для назв).`
+4. **Якщо користувач просить "детальніше" або "більше інформації" про організацію**:
+   - Використовуй дані про Бюджет, щоб описати масштаб діяльності (наприклад, "Це велика організація з значним бюджетом...").
+   - Вказуй Статус організації (Активна/В очікуванні).
+   - Розгорнуто описуй послуги на основі поля 'services'.
+5. Якщо інформації немає в наданій базі даних, чесно повідом про це і запропонуй звернутися до загальних гарячих ліній.
+6. Форматуй відповідь чітко (використовуй списки, жирний шрифт для назв).`
       }
     });
 
@@ -80,13 +87,15 @@ export class LiveSession {
       this.outputAudioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
       this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      // Prepare Context for System Instruction
+      // Prepare Context for System Instruction with detailed info
       const dataContext = JSON.stringify(this.organizations.map(o => ({
         name: o.name,
         address: o.address,
         services: o.services,
         region: o.region,
-        phone: o.phone
+        phone: o.phone,
+        category: o.category,
+        budget: o.budget // Added context for voice as well
       })), null, 2);
 
       const sessionPromise = this.client.live.connect({
@@ -99,6 +108,7 @@ export class LiveSession {
           systemInstruction: `Ти — голосова помічниця пані Думка Мапи соціальних послуг (Одеса, Миколаїв, Херсон). 
           ТВОЯ МОВА — ТІЛЬКИ УКРАЇНСЬКА. 
           Говори стисло, чітко та емпатично. 
+          Якщо питають подробиці, розкажи про послуги та масштаб організації (бюджет).
           Користувач запитує голосом. Відповідай голосом.
           Використовуй ці дані: ${dataContext}`,
         },

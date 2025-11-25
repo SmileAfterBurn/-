@@ -3,9 +3,8 @@ import { Send, User, Loader2, Download, Type, Eye, Mic, MicOff } from 'lucide-re
 import { analyzeData, LiveSession } from '../services/geminiService';
 import { Organization, ChatMessage } from '../types';
 
-// TODO: Replace this URL with your specific image URL to use "your image"
-// Currently using a professional photo placeholder for "Pani Dumka"
-const PANI_DUMKA_AVATAR = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop";
+// Updated avatar URL from user provided Google Drive link
+const PANI_DUMKA_AVATAR = "https://drive.google.com/uc?export=view&id=1dYoTa86JJjexCYGMTOKIW3t1YasxPu67";
 
 interface GeminiChatProps {
   organizations: Organization[];
